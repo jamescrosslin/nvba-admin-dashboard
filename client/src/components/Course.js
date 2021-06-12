@@ -6,8 +6,8 @@ function Course(props) {
   return (
     // TODO: add routing to component
     <Link to={`/courses/${id}`} className="course--module course--link">
-      <h2 className="course--label">{title}</h2>
-      <h3 className="course--title">{description}</h3>
+      <h2 className="course--label"> Course</h2>
+      <h3 className="course--title">{title}</h3>
     </Link>
   );
 }
