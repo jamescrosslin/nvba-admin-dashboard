@@ -1,13 +1,14 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Course(props) {
-  const { title, description } = props;
+  const { title, description, id } = props;
   return (
     // TODO: add routing to component
-    <a className="course--module course--link" href="course-detail.html">
+    <Link to={`/courses/${id}`} className="course--module course--link">
       <h2 className="course--label">{title}</h2>
       <h3 className="course--title">{description}</h3>
-    </a>
+    </Link>
   );
 }
 
