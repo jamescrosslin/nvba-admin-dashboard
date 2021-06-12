@@ -20,7 +20,7 @@ function Courses(props) {
   }, []);
 
   return (
-    <div class="wrap main--grid">
+    <div className="wrap main--grid">
       {!isLoading && courses.map((course) => <Course key={course.id} {...course} />)}
       <Link to="/courses/create" className="course--module course--add--module">
         <span className="course--add--title">
