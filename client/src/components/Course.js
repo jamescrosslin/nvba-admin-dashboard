@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 function Course(props) {
-  const { title, description, id } = props;
+  const { title, id } = props;
   return (
     // TODO: add routing to component
     <Link to={`/courses/${id}`} className="course--module course--link">
