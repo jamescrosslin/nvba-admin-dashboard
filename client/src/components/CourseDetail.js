@@ -11,15 +11,23 @@ function CourseDetail() {
   const { id } = useParams();
 
   useEffect(() => {
-    // fetch courses from api
-    async function getCourses() {
+    // fetch course from api
+    async function getCourse() {
       setIsLoading(true);
       const { data: course } = await axios.get(`${url}/api/courses/${id}`);
       console.log(id, course);
+
+      course.description = course.description.split('\n\n').map((p, i) => <p key={i}>{p}</p>);
+      if (course.materialsNeeded)
+        course.materialsNeeded = course.materialsNeeded
+          .replace(/\*/g, '')
+          .split('\n')
+          .filter((material) => material)
+          .map((material, i) => <li key={i}>{material}</li>);
       setCourse(course);
       setIsLoading(false);
     }
-    getCourses();
+    getCourse();
   }, [id]);
 
   async function handleDelete() {
@@ -61,9 +69,7 @@ function CourseDetail() {
                 <h3 className="course--detail--title">Course</h3>
                 <h4 className="course--name">{course.title}</h4>
                 <p>{course.User.name}</p>
-                {course.description.split('\n\n').map((p, i) => (
-                  <p key={i}>{p}</p>
-                ))}
+                {course.description}
               </div>
               <div>
                 {course.estimatedTime && (
@@ -75,15 +81,7 @@ function CourseDetail() {
                 {course.materialsNeeded && (
                   <React.Fragment>
                     <h3 className="course--detail--title">Materials Needed</h3>
-                    <ul className="course--detail--list">
-                      {course.materialsNeeded
-                        .replace(/\*/g, '')
-                        .split('\n')
-                        .filter((material) => material)
-                        .map((material, i) => (
-                          <li key={i}>{material}</li>
-                        ))}
-                    </ul>
+                    <ul className="course--detail--list">{course.materialsNeeded}</ul>
                   </React.Fragment>
                 )}
               </div>
