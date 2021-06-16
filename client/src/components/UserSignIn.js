@@ -6,7 +6,7 @@ function UserSignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { user, signIn } = useUserContext();
+  const { signIn } = useUserContext();
 
   let history = useHistory();
   let location = useLocation();
