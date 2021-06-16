@@ -8,39 +8,47 @@ import UserSignIn from './components/UserSignIn';
 import UserSignUp from './components/UserSignUp';
 import UserSignOut from './components/UserSignOut';
 import PrivateRoute from './components/PrivateRoute';
-import { UserProvider } from './context/UserContext';
+import { useUserContext } from './context/UserContext';
+import { useEffect } from 'react';
 
 function App() {
+  const { signIn } = useUserContext();
+
+  useEffect(() => {
+    if (localStorage?.user) {
+      const { username, password } = JSON.parse(localStorage.user);
+      signIn(username, password);
+    }
+  }, [signIn]);
+
   return (
     <BrowserRouter>
-      <UserProvider>
-        <Header />
-        <main>
-          <Switch>
-            <Route path="/" exact>
-              <Courses />
-            </Route>
-            <PrivateRoute path="/courses/create">
-              <CreateCourse />
-            </PrivateRoute>
-            <PrivateRoute path="/courses/:id/update" exact>
-              <UpdateCourse />
-            </PrivateRoute>
-            <Route path="/courses/:id">
-              <CourseDetail />
-            </Route>
-            <Route path="/signin">
-              <UserSignIn />
-            </Route>
-            <Route path="/signup">
-              <UserSignUp />
-            </Route>
-            <Route path="/signout">
-              <UserSignOut />
-            </Route>
-          </Switch>
-        </main>
-      </UserProvider>
+      <Header />
+      <main>
+        <Switch>
+          <Route path="/" exact>
+            <Courses />
+          </Route>
+          <PrivateRoute path="/courses/create">
+            <CreateCourse />
+          </PrivateRoute>
+          <PrivateRoute path="/courses/:id/update" exact>
+            <UpdateCourse />
+          </PrivateRoute>
+          <Route path="/courses/:id">
+            <CourseDetail />
+          </Route>
+          <Route path="/signin">
+            <UserSignIn />
+          </Route>
+          <Route path="/signup">
+            <UserSignUp />
+          </Route>
+          <Route path="/signout">
+            <UserSignOut />
+          </Route>
+        </Switch>
+      </main>
     </BrowserRouter>
   );
 }
