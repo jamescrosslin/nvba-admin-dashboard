@@ -18,8 +18,8 @@ function UserSignIn() {
 
     await signIn(email, password);
 
-    history.replace(from);
     setIsLoading(false);
+    history.replace(from);
   }
 
   return (
