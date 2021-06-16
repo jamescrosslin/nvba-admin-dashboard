@@ -1,6 +1,7 @@
 import { Link, NavLink } from 'react-router-dom';
-function Header(props) {
-  const { prop } = props;
+import { useUserContext } from '../context/UserContext';
+function Header() {
+  const { user } = useUserContext();
   return (
     <header>
       <div className="wrap header--flex">
@@ -8,13 +9,24 @@ function Header(props) {
           <NavLink to="/">Courses</NavLink>
         </h1>
         <nav>
-          <ul className="header--signedout">
-            <li>
-              <NavLink to="/signup">Sign Up</NavLink>
-            </li>
-            <li>
-              <NavLink to="/signin">Sign In</NavLink>
-            </li>
+          <ul className={`header--${user.firstName ? 'signedin' : 'signedout'}`}>
+            {(user.firstName && (
+              <>
+                <li>Welcome, Joe Smith!</li>
+                <li>
+                  <Link to="/signout">Sign Out</Link>
+                </li>
+              </>
+            )) || (
+              <>
+                <li>
+                  <NavLink to="/signup">Sign Up</NavLink>
+                </li>
+                <li>
+                  <NavLink to="/signin">Sign In</NavLink>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
       </div>
