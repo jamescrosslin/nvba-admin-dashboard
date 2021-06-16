@@ -10,10 +10,10 @@ function Header(props) {
         <nav>
           <ul className="header--signedout">
             <li>
-              <NavLink to="/userSignUp">Sign Up</NavLink>
+              <NavLink to="/signup">Sign Up</NavLink>
             </li>
             <li>
-              <NavLink to="/userSignIn">Sign In</NavLink>
+              <NavLink to="/signin">Sign In</NavLink>
             </li>
           </ul>
         </nav>
