@@ -10,12 +10,12 @@ router
     authenticateUser,
     asyncHandler(async (req, res) => {
       // find User by primary key
-      const users = await User.findByPk(req.currentUser.id, {
+      const user = await User.findByPk(req.currentUser.id, {
         attributes: {
           exclude: ['password', 'createdAt', 'updatedAt'],
         },
       });
-      res.json(users);
+      res.json(user);
     }),
   )
   .post(
