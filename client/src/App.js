@@ -7,6 +7,7 @@ import CreateCourse from './components/CreateCourse';
 import UserSignIn from './components/UserSignIn';
 import UserSignUp from './components/UserSignUp';
 import UserSignOut from './components/UserSignOut';
+import PrivateRoute from './components/PrivateRoute';
 import { UserProvider } from './context/UserContext';
 
 function App() {
@@ -22,9 +23,9 @@ function App() {
             <Route path="/courses/create">
               <CreateCourse />
             </Route>
-            <Route path="/courses/:id/update" exact>
+            <PrivateRoute path="/courses/:id/update" exact>
               <UpdateCourse />
-            </Route>
+            </PrivateRoute>
             <Route path="/courses/:id">
               <CourseDetail />
             </Route>
@@ -33,9 +34,6 @@ function App() {
             </Route>
             <Route path="/signup">
               <UserSignUp />
-            </Route>
-            <Route path="/signout">
-              <UserSignOut />
             </Route>
           </Switch>
         </main>
