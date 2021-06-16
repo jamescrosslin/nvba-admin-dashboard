@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useUserContext } from '../context/UserContext';
 
 function UserSignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const history = useHistory();
-
   const { user, signIn } = useUserContext();
+
+  let history = useHistory();
+  let location = useLocation();
+  let { from } = location.state || { from: { pathname: '/' } };
 
   async function handleSubmit(e) {
     setIsLoading(true);
@@ -16,6 +18,7 @@ function UserSignIn() {
 
     await signIn(email, password);
 
+    history.replace(from);
     setIsLoading(false);
   }
 
