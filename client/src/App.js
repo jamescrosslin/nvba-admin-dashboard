@@ -20,9 +20,9 @@ function App() {
             <Route path="/" exact>
               <Courses />
             </Route>
-            <Route path="/courses/create">
+            <PrivateRoute path="/courses/create">
               <CreateCourse />
-            </Route>
+            </PrivateRoute>
             <PrivateRoute path="/courses/:id/update" exact>
               <UpdateCourse />
             </PrivateRoute>
@@ -34,6 +34,9 @@ function App() {
             </Route>
             <Route path="/signup">
               <UserSignUp />
+            </Route>
+            <Route path="/signout">
+              <UserSignOut />
             </Route>
           </Switch>
         </main>
