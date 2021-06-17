@@ -7,31 +7,38 @@ import { useUserContext } from '../context/UserContext';
 function UserSignUp(props) {
   const [formValues, setFormValues] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
+
   const history = useHistory();
   const { user, signIn } = useUserContext();
   //must use error boundary above this component to catch errors
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (formValues.password !== formValues.confirmPassword) {
-      const error = new Error('');
-      error.errors = ['Password and Confirm Password do not match'];
-      throw error;
-    }
     setIsLoading(true);
-    const { data } = await axios({
-      method: 'post',
-      url: `${url}/api/users`,
-      data: formValues,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    console.log(data);
-    // pass data up to context
-    await signIn(formValues.emailAddress, formValues.password);
-    setIsLoading(false);
-    history.push('/');
+    try {
+      if (formValues.password !== formValues.confirmPassword) {
+        const error = new Error('Sign Up Failed');
+        error.errors = ['Password and Confirm Password do not match'];
+        throw error;
+      }
+      const { data } = await axios({
+        method: 'post',
+        url: `${url}/api/users`,
+        data: formValues,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log(data);
+      // pass data up to context
+      await signIn(formValues.emailAddress, formValues.password);
+      setIsLoading(false);
+      history.push('/');
+    } catch (err) {
+      setError(error.response.data);
+      setIsLoading(false);
+    }
   }
   function handleFormChange(e) {
     setFormValues((prevState) => {
