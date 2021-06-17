@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { url } from '../utils';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useHistory, Link } from 'react-router-dom';
 import ErrorBoundary from './ErrorBoundary';
+import { useUserContext } from '../context/UserContext';
 
 function CourseDetail() {
   const [course, setCourse] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const { id } = useParams();
+  const { user } = useUserContext();
+  const history = useHistory();
 
   useEffect(() => {
     // fetch course from api
@@ -33,9 +36,17 @@ function CourseDetail() {
   async function handleDelete() {
     setIsLoading(true);
     try {
-      const response = await axios.delete(`${url}/api/courses/${id}`);
+      const response = await axios({
+        method: 'delete',
+        url: `${url}/api/courses/${id}`,
+        auth: {
+          username: user.username,
+          password: user.password,
+        },
+      });
       console.log(response);
       setIsLoading(false);
+      history.push('/');
     } catch (e) {
       console.dir(e);
       setError(e.response.data.message);
