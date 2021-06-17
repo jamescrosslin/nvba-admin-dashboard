@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react';
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
 // custom component imports
-import Header from './components/Header';
+import Header from './components/partials/Header';
 import Courses from './components/Courses';
 import CourseDetail from './components/CourseDetail';
 import UpdateCourse from './components/UpdateCourse';
@@ -9,9 +10,11 @@ import UserSignIn from './components/UserSignIn';
 import UserSignUp from './components/UserSignUp';
 import UserSignOut from './components/UserSignOut';
 import PrivateRoute from './components/PrivateRoute';
+import NotFound from './components/NotFound';
+import Forbidden from './components/Forbidden';
+import UnhandledError from './components/UnhandledError';
 
 import { useUserContext } from './context/UserContext';
-import { useEffect, useState } from 'react';
 
 function App() {
   const { user, signIn } = useUserContext();
@@ -53,6 +56,18 @@ function App() {
             </Route>
             <Route path="/signout">
               <UserSignOut />
+            </Route>
+            <Route path="/notfound">
+              <NotFound />
+            </Route>
+            <Route path="/forbidden">
+              <Forbidden />
+            </Route>
+            <Route path="/error">
+              <UnhandledError />
+            </Route>
+            <Route>
+              <Redirect to="/notfound" />
             </Route>
           </Switch>
         </main>
