@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { url } from '../utils';
 import { Link, useHistory } from 'react-router-dom';
+import { useUserContext } from '../context/UserContext';
 
 function CourseForm(props) {
   const { method, apiRoute, course, title } = props;
@@ -9,12 +10,24 @@ function CourseForm(props) {
   const [error, setError] = useState(false);
   const [formValues, setFormValues] = useState(course || {});
   const history = useHistory();
+  const { user } = useUserContext();
 
   async function handleSubmit(event) {
     event.preventDefault();
     setIsLoading(true);
     try {
-      const response = await axios[method](`${url}${apiRoute}`, formValues);
+      const response = await axios({
+        method,
+        url: `${url}${apiRoute}`,
+        data: formValues,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        auth: {
+          username: user.username,
+          password: user.password,
+        },
+      });
       console.log(response);
       setIsLoading(false);
       history.push('/');
@@ -40,10 +53,10 @@ function CourseForm(props) {
         {/* displays validation errors when they exist */}
         {error.errors && (
           <div className="validation--errors">
-            <h3>Validation Errors</h3>
+            <h3>{error.message}</h3>
             <ul>
               {error.errors.map((err, i) => (
-                <li key={i}>err</li>
+                <li key={i}>{err}</li>
               ))}
             </ul>
           </div>
