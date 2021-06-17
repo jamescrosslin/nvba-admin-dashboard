@@ -12,7 +12,7 @@ function Header() {
           <ul className={`header--${user.firstName ? 'signedin' : 'signedout'}`}>
             {(user.firstName && (
               <>
-                <li>Welcome, Joe Smith!</li>
+                <li>Welcome, {`${user.firstName} ${user.lastName}`}!</li>
                 <li>
                   <Link to="/signout">Sign Out</Link>
                 </li>
