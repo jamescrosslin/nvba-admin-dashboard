@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { url } from '../utils';
 import { useParams, useHistory, Link } from 'react-router-dom';
-import ErrorBoundary from './ErrorBoundary';
 import { useUserContext } from '../context/UserContext';
+import ValidationErrors from './partials/ValidationErrors';
 
 function CourseDetail() {
   const [course, setCourse] = useState(null);
@@ -34,6 +34,7 @@ function CourseDetail() {
   }, [id]);
 
   async function handleDelete() {
+    setError(false);
     setIsLoading(true);
     try {
       const response = await axios({
@@ -49,7 +50,7 @@ function CourseDetail() {
       history.push('/');
     } catch (e) {
       console.dir(e);
-      setError(e.response.data.message);
+      setError(e.response.data);
       setIsLoading(false);
     }
   }
@@ -71,29 +72,29 @@ function CourseDetail() {
             </Link>
           </div>
         </div>
-        {error && <span>{error}</span>}
         <div className="wrap">
           <h2>Course Detail</h2>
+          {error && <ValidationErrors error={error} />}
           <form>
             <div className="main--flex">
               <div>
                 <h3 className="course--detail--title">Course</h3>
                 <h4 className="course--name">{course.title}</h4>
-                <p>{course.User.name}</p>
+                <p>By: {`${course.User.firstName} ${course.User.lastName}`}</p>
                 {course.description}
               </div>
               <div>
                 {course.estimatedTime && (
-                  <React.Fragment>
+                  <>
                     <h3 className="course--detail--title">Estimated Time</h3>
                     <p>{course.estimatedTime}</p>
-                  </React.Fragment>
+                  </>
                 )}
                 {course.materialsNeeded && (
-                  <React.Fragment>
+                  <>
                     <h3 className="course--detail--title">Materials Needed</h3>
                     <ul className="course--detail--list">{course.materialsNeeded}</ul>
-                  </React.Fragment>
+                  </>
                 )}
               </div>
             </div>
