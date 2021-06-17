@@ -76,7 +76,9 @@ module.exports = {
   checkOwnership: (req, res, next) => {
     // checks if the logged in user is interacting with a course assigned to them
     if (req.currentUser.id !== req.course.userId) {
-      const error = new Error("Cannot modify another user's course");
+      const error = new Error('Authorization Error');
+      error.errors = error.errors || [];
+      error.errors.push("Cannot modify another user's course");
       error.status = 403;
       throw error;
     } else {

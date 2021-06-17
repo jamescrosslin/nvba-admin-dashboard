@@ -20,6 +20,7 @@ app.use(morgan('dev'));
 
 // parse incoming JSON payloads
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Link to database
 (async () => {
@@ -64,10 +65,11 @@ app.use((err, _req, res, _next) => {
   if (enableGlobalErrorLogging) {
     console.error(`Global error handler: ${JSON.stringify(err.stack)}`);
   }
-  const errors = err.validationErrors || err.errors || ['No further information'];
+  const message = err.message || 'Internal Server Error';
+  const errors = err.validationErrors || err.errors || [];
   res.status(err.status || 500).json({
-    message: err.message,
-    error: errors,
+    message,
+    errors,
   });
 });
 

@@ -34,13 +34,13 @@ router
         all of req.body to prevent SQL injection or other malicious activity through
         unanticipated props like aggregating functions
       */
-      const { title, description, estimatedTime, materialsNeeded, userId } = req.body;
+      const { title, description, estimatedTime, materialsNeeded } = req.body;
       const { id } = await Course.create({
         title,
         description,
         estimatedTime,
         materialsNeeded,
-        userId,
+        userId: req.currentUser.id,
       });
       res.location(`/api/courses/${id}`).status(201).send();
     }),
@@ -58,7 +58,8 @@ router.param('id', async (req, res, next, id) => {
     req.course = await Course.findByPk(id, courseQueryOptions);
     next();
   } catch (err) {
-    err.message = 'Could not find course with that id';
+    err.message = 'Search Failure';
+    err.errors = ['Could not find course with that id'];
     err.status = 404;
     next(err);
   }
@@ -77,6 +78,7 @@ router
         unanticipated props like aggregating functions
       */
       const { title, description, estimatedTime, materialsNeeded } = req.body;
+      console.log(req.body);
       await req.course.update({ title, description, estimatedTime, materialsNeeded });
       res.status(204).send();
     }),
