@@ -15,6 +15,7 @@ function UserSignUp(props) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setError(false);
     setIsLoading(true);
     try {
       if (formValues.password !== formValues.confirmPassword) {
