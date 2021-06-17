@@ -1,18 +1,37 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { url } from '../utils';
+import { useUserContext } from '../context/UserContext';
 
 function UserSignUp(props) {
   const [formValues, setFormValues] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const history = useHistory();
+  const { user, signIn } = useUserContext();
+  //must use error boundary above this component to catch errors
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (formValues.password !== formValues.confirmPassword) {
+      const error = new Error('');
+      error.errors = ['Password and Confirm Password do not match'];
+      throw error;
+    }
     setIsLoading(true);
-    const { data } = await axios.get(`${url}/api/users`);
+    const { data } = await axios({
+      method: 'post',
+      url: `${url}/api/users`,
+      data: formValues,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    console.log(data);
     // pass data up to context
+    await signIn(formValues.emailAddress, formValues.password);
     setIsLoading(false);
+    history.push('/');
   }
   function handleFormChange(e) {
     setFormValues((prevState) => {
@@ -59,12 +78,12 @@ function UserSignUp(props) {
             value={formValues['password'] || ''}
             onChange={handleFormChange}
           />
-          <label htmlFor="confirmedPassword">Confirmed Password</label>
+          <label htmlFor="confirmPassword">Confirm Password</label>
           <input
             type="password"
-            name="confirmedPassword"
-            id="confirmedPassword"
-            value={formValues['confirmedPassword'] || ''}
+            name="confirmPassword"
+            id="confirmPassword"
+            value={formValues['confirmPassword'] || ''}
             onChange={handleFormChange}
           />
           <button className="button" type="submit">
