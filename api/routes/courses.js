@@ -56,6 +56,7 @@ router.param('id', async (req, res, next, id) => {
     // finds course by primary key which is :id route parameter
     // saves found course to req.course to travel along through middleware
     req.course = await Course.findByPk(id, courseQueryOptions);
+    if (!req.course) throw new Error();
     next();
   } catch (err) {
     err.message = 'Search Failure';
