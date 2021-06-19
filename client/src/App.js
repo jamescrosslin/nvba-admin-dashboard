@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
-
-// custom components
+// custom component imports
 import Header from './components/partials/Header';
 import Courses from './components/Courses';
 import CourseDetail from './components/CourseDetail';
@@ -15,7 +14,6 @@ import NotFound from './components/NotFound';
 import Forbidden from './components/Forbidden';
 import UnhandledError from './components/UnhandledError';
 
-// React context
 import { useUserContext } from './context/UserContext';
 
 function App() {
@@ -23,8 +21,6 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // define function to check for persistent sign in
-    // and verify correct sign in
     async function checkUserStorage() {
       setIsLoading(true);
       if (localStorage?.user) {
@@ -33,7 +29,6 @@ function App() {
       }
       setIsLoading(false);
     }
-
     checkUserStorage();
   }, [signIn]);
 
@@ -56,8 +51,12 @@ function App() {
               <CourseDetail />
             </Route>
             <Route path="/signin">{user?.username ? <Redirect to="/" /> : <UserSignIn />}</Route>
-            <Route path="/signup">{user?.username ? <Redirect to="/" /> : <UserSignUp />}</Route>
-            <Route path="/signout">{user?.username ? <UserSignOut /> : <Redirect to="/" />}</Route>
+            <Route path="/signup">
+              <UserSignUp />
+            </Route>
+            <Route path="/signout">
+              <UserSignOut />
+            </Route>
             <Route path="/notfound">
               <NotFound />
             </Route>
