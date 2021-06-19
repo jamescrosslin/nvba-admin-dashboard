@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Course from './Course';
 import axios from 'axios';
 import { url } from '../utils';
@@ -7,17 +7,23 @@ import { url } from '../utils';
 function Courses(props) {
   const [courses, setCourses] = useState(null);
   const [isLoading, setLoading] = useState(true);
+  const history = useHistory();
 
   useEffect(() => {
     // fetch courses from api
+
     async function getCourses() {
-      setLoading(true);
-      const { data: courses } = await axios.get(`${url}/api/courses`);
-      setCourses(courses);
-      setLoading(false);
+      try {
+        setLoading(true);
+        const { data: courses } = await axios.get(`${url}/api/courses`);
+        setCourses(courses);
+        setLoading(false);
+      } catch (err) {
+        history.push('/');
+      }
     }
     getCourses();
-  }, []);
+  }, [history]);
 
   return (
     <div className="wrap main--grid">

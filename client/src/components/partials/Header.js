@@ -6,7 +6,7 @@ function Header() {
     <header>
       <div className="wrap header--flex">
         <h1 className="header--logo">
-          <NavLink to="/">Courses</NavLink>
+          <Link to="/">Courses</Link>
         </h1>
         <nav>
           <ul className={`header--${user.firstName ? 'signedin' : 'signedout'}`}>
