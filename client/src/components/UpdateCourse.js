@@ -31,6 +31,7 @@ function UpdateCourse() {
         title="Update Course"
         method="put"
         apiRoute={`/api/courses/${id}`}
+        error={error}
       />
     ))
   );
