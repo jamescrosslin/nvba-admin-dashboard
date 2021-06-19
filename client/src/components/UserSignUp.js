@@ -4,13 +4,14 @@ import axios from 'axios';
 import { url } from '../utils';
 import { useUserContext } from '../context/UserContext';
 
-function UserSignUp() {
+function UserSignUp(props) {
   const [formValues, setFormValues] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
 
   const history = useHistory();
-  const { signIn } = useUserContext();
+  const { user, signIn } = useUserContext();
+  //must use error boundary above this component to catch errors
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -40,7 +41,6 @@ function UserSignUp() {
       setIsLoading(false);
     }
   }
-
   function handleFormChange(e) {
     setFormValues((prevState) => {
       return {

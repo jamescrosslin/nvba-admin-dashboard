@@ -23,6 +23,7 @@ export const useUserContext = () => {
           url: `${url}/api/users`,
           auth: { username, password },
         });
+        console.log(data);
         localStorage.user = JSON.stringify({ ...data, username, password });
         setUser({ ...data, username, password });
       } catch (err) {
