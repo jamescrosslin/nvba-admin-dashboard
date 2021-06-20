@@ -4,6 +4,7 @@ import { url } from '../utils';
 import { useParams, useHistory, Link } from 'react-router-dom';
 import { useUserContext } from '../context/UserContext';
 import ValidationErrors from './partials/ValidationErrors';
+import { ErrorHandler } from './partials/ErrorHandler';
 
 function CourseDetail() {
   const [course, setCourse] = useState(null);
@@ -16,19 +17,24 @@ function CourseDetail() {
   useEffect(() => {
     // fetch course from api
     async function getCourse() {
-      setIsLoading(true);
-      const { data: course } = await axios.get(`${url}/api/courses/${id}`);
-      console.log(id, course);
+      try {
+        setIsLoading(true);
+        const { data: course } = await axios.get(`${url}/api/courses/${id}`);
+        console.log(id, course);
 
-      course.description = course.description.split('\n\n').map((p, i) => <p key={i}>{p}</p>);
-      if (course.materialsNeeded)
-        course.materialsNeeded = course.materialsNeeded
-          .replace(/\*/g, '')
-          .split('\n')
-          .filter((material) => material)
-          .map((material, i) => <li key={i}>{material}</li>);
-      setCourse(course);
-      setIsLoading(false);
+        course.description = course.description.split('\n\n').map((p, i) => <p key={i}>{p}</p>);
+        if (course.materialsNeeded)
+          course.materialsNeeded = course.materialsNeeded
+            .replace(/\*/g, '')
+            .split('\n')
+            .filter((material) => material)
+            .map((material, i) => <li key={i}>{material}</li>);
+        setCourse(course);
+        setIsLoading(false);
+      } catch (err) {
+        console.dir(err);
+        history.push('/notfound');
+      }
     }
     getCourse();
   }, [id]);
@@ -50,7 +56,7 @@ function CourseDetail() {
       history.push('/');
     } catch (e) {
       console.dir(e);
-      setError(e.response.data);
+      setError(e.response);
       setIsLoading(false);
     }
   }
