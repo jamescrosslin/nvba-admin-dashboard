@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Redirect } from 'react-router-dom';
+import { useParams, Redirect, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import CourseForm from './CourseForm';
-import { url } from '../utils';
+import { url, errorRoutes } from '../utils';
 import { useUserContext } from '../context/UserContext';
 
 function UpdateCourse() {
@@ -11,15 +11,20 @@ function UpdateCourse() {
   const [error, setError] = useState(false);
   const { id } = useParams();
   const { user } = useUserContext();
+  const history = useHistory();
 
   useEffect(() => {
     // fetch course from api
     async function getCourse() {
-      setIsLoading(true);
-      const { data: course } = await axios.get(`${url}/api/courses/${id}`);
-      console.log(id, course);
-      setCourse(course);
-      setIsLoading(false);
+      try {
+        setIsLoading(true);
+        const { data: course } = await axios.get(`${url}/api/courses/${id}`);
+        console.log(id, course);
+        setCourse(course);
+        setIsLoading(false);
+      } catch (err) {
+        history.push(errorRoutes[err.response.status]);
+      }
     }
     getCourse();
   }, [id]);

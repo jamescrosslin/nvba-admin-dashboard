@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useCallback } from 'react';
 import axios from 'axios';
-import { url } from '../utils';
+import { url } from '../config';
 
 const UserContext = createContext({
   user: {},

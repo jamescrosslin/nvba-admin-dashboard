@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { url } from '../utils';
+import { url, errorRoutes } from '../utils';
 import { Link, useHistory } from 'react-router-dom';
 import { useUserContext } from '../context/UserContext';
 import ValidationErrors from './partials/ValidationErrors';
@@ -34,9 +34,13 @@ function CourseForm(props) {
       setIsLoading(false);
       history.push('/');
     } catch (error) {
-      console.dir(error);
-      setError(error.response.data);
-      setIsLoading(false);
+      const status = error.response.status;
+      if (status === 400) {
+        setError(error.response.data);
+        setIsLoading(false);
+      } else {
+        history.push(errorRoutes[status] || 500);
+      }
     }
   }
 
