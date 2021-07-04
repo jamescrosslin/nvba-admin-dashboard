@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { url } from '../utils';
+import { url } from '../config';
 import axios from 'axios';
 import { useUserContext } from '../context/UserContext';
 

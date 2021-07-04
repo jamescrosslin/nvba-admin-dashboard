@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import Course from './Course';
 import axios from 'axios';
-import { url } from '../utils';
+import { url } from '../config';
 
 function Courses(props) {
   const [courses, setCourses] = useState(null);

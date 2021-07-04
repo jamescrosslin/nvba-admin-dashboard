@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { url, errorRoutes } from '../utils';
+import { url, errorRoutes } from '../config';
 import { Link, useHistory } from 'react-router-dom';
 import { useUserContext } from '../context/UserContext';
 import ValidationErrors from './partials/ValidationErrors';

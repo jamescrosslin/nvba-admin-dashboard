@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { url } from '../utils';
+import { url } from '../config';
 import { useUserContext } from '../context/UserContext';
 
 function UserSignUp() {

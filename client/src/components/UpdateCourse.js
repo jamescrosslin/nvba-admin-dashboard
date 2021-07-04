@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Redirect, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import CourseForm from './CourseForm';
-import { url, errorRoutes } from '../utils';
+import { url, errorRoutes } from '../config';
 import { useUserContext } from '../context/UserContext';
 
 function UpdateCourse() {
