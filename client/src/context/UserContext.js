@@ -18,15 +18,18 @@ export const useUserContext = () => {
   const signIn = useCallback(
     async (username, password) => {
       try {
-        const { data } = await axios({
+        const response = await axios({
           method: 'get',
           url: `${url}/api/users`,
           auth: { username, password },
         });
+        const { data } = response;
         localStorage.user = JSON.stringify({ ...data, username, password });
         setUser({ ...data, username, password });
+        return response;
       } catch (err) {
         console.log(err);
+        return err.response;
       }
     },
     [setUser],

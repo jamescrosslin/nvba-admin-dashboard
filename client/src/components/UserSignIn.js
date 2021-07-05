@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useUserContext } from '../context/UserContext';
+import { errorRoutes } from '../config';
 
 function UserSignIn() {
   const [email, setEmail] = useState('');
@@ -16,10 +17,11 @@ function UserSignIn() {
     setIsLoading(true);
     e.preventDefault();
 
-    await signIn(email, password);
-
-    setIsLoading(false);
-    history.replace(from);
+    const response = await signIn(email, password);
+    if (response.status !== 200) history.push(errorRoutes[response.status] || 500);
+    else {
+      history.replace(from);
+    }
   }
 
   return (
