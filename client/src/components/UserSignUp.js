@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { url } from '../config';
+import { url, errorRoutes } from '../config';
 import { useUserContext } from '../context/UserContext';
+import ValidationErrors from './partials/ValidationErrors';
 
 function UserSignUp() {
   const [formValues, setFormValues] = useState({});
@@ -18,9 +19,15 @@ function UserSignUp() {
     setIsLoading(true);
     try {
       if (formValues.password !== formValues.confirmPassword) {
-        const error = new Error('Sign Up Failed');
-        error.errors = ['Password and Confirm Password do not match'];
-        throw error;
+        const err = new Error();
+        err.response = {
+          data: {
+            message: 'Sign up failed.',
+            errors: ['Password and Confirm Password do not match'],
+          },
+          status: 400,
+        };
+        throw err;
       }
       const { data } = await axios({
         method: 'post',
@@ -30,14 +37,18 @@ function UserSignUp() {
           'Content-Type': 'application/json',
         },
       });
-      console.log(data);
       // pass data up to context
       await signIn(formValues.emailAddress, formValues.password);
-      setIsLoading(false);
+
       history.push('/');
     } catch (err) {
-      setError(error.response.data);
-      setIsLoading(false);
+      console.log(err.response);
+      if (err.response.status === 400) {
+        setError(err.response.data);
+        setIsLoading(false);
+      } else {
+        history.push(errorRoutes[err.response.status]);
+      }
     }
   }
 
@@ -53,6 +64,9 @@ function UserSignUp() {
   return (
     !isLoading && (
       <div className="form--centered">
+        <h2>Sign Up</h2>
+        {/* displays validation errors when they exist */}
+        {error.errors && <ValidationErrors error={error} />}
         <form onSubmit={handleSubmit}>
           <label htmlFor="firstName">First Name</label>
           <input
