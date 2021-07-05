@@ -94,14 +94,13 @@ function CourseDetail() {
                   </>
                 )}
                 {course.materialsNeeded && (
-                  <ReactMarkdown
-                    children={
-                      <>
-                        <h3 className="course--detail--title">Materials Needed</h3>
-                        <ul className="course--detail--list">{course.materialsNeeded}</ul>
-                      </>
-                    }
-                  />
+                  <>
+                    <h3 className="course--detail--title">Materials Needed</h3>
+                    <ReactMarkdown
+                      className="course--detail--list"
+                      children={course.materialsNeeded}
+                    />
+                  </>
                 )}
               </div>
             </div>
