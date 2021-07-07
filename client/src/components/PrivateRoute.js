@@ -8,6 +8,7 @@ function PrivateRoute({ children, ...rest }) {
     <Route
       {...rest}
       render={({ location }) =>
+        // if user is logged in render children, else render /signin route
         user?.username ? (
           children
         ) : (

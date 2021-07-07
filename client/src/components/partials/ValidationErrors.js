@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
-function ValidationErrors(props) {
-  const { error } = props;
+function ValidationErrors({ error }) {
+  // create an array of lis from validation errors
   const errors = error.errors.map((err, i) => <li key={i}>{err}</li>);
 
   return (

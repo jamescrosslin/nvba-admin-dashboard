@@ -12,34 +12,25 @@ function CourseDetail() {
   const { user } = useUserContext();
   const history = useHistory();
 
+  // fetches course data only when id or history change
   useEffect(() => {
-    // fetch course from api
-    async function getCourse() {
+    (async () => {
       try {
         setIsLoading(true);
+        // fetch course from api
         const { data: course } = await axios.get(`${url}/api/courses/${id}`);
-        console.log(id, course);
-
-        // course.description = course.description.split('\n\n').map((p, i) => <p key={i}>{p}</p>);
-        // if (course.materialsNeeded)
-        //   course.materialsNeeded = course.materialsNeeded
-        //     .replace(/\*/g, '')
-        //     .split('\n')
-        //     .filter((material) => material)
-        //     .map((material, i) => <li key={i}>{material}</li>);
         setCourse(course);
         setIsLoading(false);
       } catch (err) {
         history.push(errorRoutes[err.response.status]);
       }
-    }
-    getCourse();
-  }, [id]);
+    })();
+  }, [id, history]);
 
   async function handleDelete() {
     setIsLoading(true);
     try {
-      const response = await axios({
+      await axios({
         method: 'delete',
         url: `${url}/api/courses/${id}`,
         auth: {
@@ -47,8 +38,6 @@ function CourseDetail() {
           password: user.password,
         },
       });
-      console.log(response);
-      setIsLoading(false);
       history.push('/');
     } catch (err) {
       history.push(errorRoutes[err.response.status]);
@@ -61,16 +50,19 @@ function CourseDetail() {
       <>
         <div className="actions--bar">
           <div className="wrap">
-            {user.username && user.id === course.userId && (
-              <>
-                <Link className="button" to={`/courses/${id}/update`}>
-                  Update Course
-                </Link>
-                <button className="button" onClick={handleDelete}>
-                  Delete Course
-                </button>
-              </>
-            )}
+            {
+              /* only renders Update and Delete buttons if a user is logged in and has the same id as the course owner */
+              user?.id === course.userId && (
+                <>
+                  <Link className="button" to={`/courses/${id}/update`}>
+                    Update Course
+                  </Link>
+                  <button className="button" onClick={handleDelete}>
+                    Delete Course
+                  </button>
+                </>
+              )
+            }
             <Link className="button button-secondary" to="/">
               Return to List
             </Link>
@@ -84,9 +76,11 @@ function CourseDetail() {
                 <h3 className="course--detail--title">Course</h3>
                 <h4 className="course--name">{course.title}</h4>
                 <p>By: {`${course.User.firstName} ${course.User.lastName}`}</p>
+                {/* ReactMarkdown takes a markdown string and converts it to jsx */}
                 <ReactMarkdown children={course.description} />
               </div>
               <div>
+                {/* estimatedTime and materialsNeeded render conditionally */}
                 {course.estimatedTime && (
                   <>
                     <h3 className="course--detail--title">Estimated Time</h3>

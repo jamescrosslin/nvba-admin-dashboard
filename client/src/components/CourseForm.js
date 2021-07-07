@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { url, errorRoutes } from '../config';
 import { Link, useHistory } from 'react-router-dom';
 import { useUserContext } from '../context/UserContext';
 import ValidationErrors from './partials/ValidationErrors';
 
-function CourseForm(props) {
-  const { method, apiRoute, course, title } = props;
+function CourseForm({ method, apiRoute, course, title }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const [formValues, setFormValues] = useState(course || {});
@@ -15,10 +14,12 @@ function CourseForm(props) {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    // set error to false to stop previous validation error data from persisting
     setError(false);
     setIsLoading(true);
     try {
-      const response = await axios({
+      //submission method and route are designed for modularity with posts or updates
+      await axios({
         method,
         url: `${url}${apiRoute}`,
         data: formValues,
@@ -30,16 +31,16 @@ function CourseForm(props) {
           password: user.password,
         },
       });
-      console.log(response);
-      setIsLoading(false);
       history.push('/');
     } catch (error) {
       const status = error.response.status;
+      // 400 represents a validation error, so error state is set and ValidationError componenent renders
       if (status === 400) {
         setError(error.response.data);
         setIsLoading(false);
       } else {
-        history.push(errorRoutes[status] || 500);
+        // any other error should be handled by
+        history.push(errorRoutes?.[status] || '/error');
       }
     }
   }
@@ -47,7 +48,10 @@ function CourseForm(props) {
   function handleFormChange(e) {
     setFormValues((prevState) => {
       return {
+        // spread previous state to ensure persistence of form field values
         ...prevState,
+        // whichever form field is the target of the change event will have its
+        // name attribute used as a property on formValues and its value saved
         [e.target.name]: e.target.value,
       };
     });

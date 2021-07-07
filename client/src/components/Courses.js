@@ -10,24 +10,23 @@ function Courses(props) {
   const history = useHistory();
 
   useEffect(() => {
-    // fetch courses from api
-
-    async function getCourses() {
+    // IIFE to fetch courses from api
+    (async () => {
       try {
         setLoading(true);
         const { data: courses } = await axios.get(`${url}/api/courses`);
-        setCourses(courses);
+        // set courses state to an array of Course components
+        setCourses(courses.map((course) => <Course key={course.id} {...course} />));
         setLoading(false);
       } catch (err) {
-        history.push('/');
+        history.push('/error');
       }
-    }
-    getCourses();
+    })();
   }, [history]);
 
   return (
     <div className="wrap main--grid">
-      {!isLoading && courses.map((course) => <Course key={course.id} {...course} />)}
+      {!isLoading && courses}
       <Link to="/courses/create" className="course--module course--add--module">
         <span className="course--add--title">
           <svg

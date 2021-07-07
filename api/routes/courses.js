@@ -79,7 +79,6 @@ router
         unanticipated props like aggregating functions
       */
       const { title, description, estimatedTime, materialsNeeded } = req.body;
-      console.log(req.body);
       await req.course.update({ title, description, estimatedTime, materialsNeeded });
       res.status(204).send();
     }),

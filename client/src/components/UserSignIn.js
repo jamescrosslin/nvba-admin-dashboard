@@ -11,14 +11,15 @@ function UserSignIn() {
 
   let history = useHistory();
   let location = useLocation();
+  // gets previous route from location object
   let { from } = location.state || { from: { pathname: '/' } };
 
   async function handleSubmit(e) {
-    setIsLoading(true);
     e.preventDefault();
-
+    setIsLoading(true);
     const response = await signIn(email, password);
-    if (response.status !== 200) history.push(errorRoutes[response.status] || 500);
+    // if the response is an error, redirect to handler route
+    if (response.status !== 200) history.push(errorRoutes?.[response.status] || '/error');
     else {
       history.replace(from);
     }

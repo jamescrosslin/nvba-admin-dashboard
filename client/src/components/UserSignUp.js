@@ -29,7 +29,7 @@ function UserSignUp() {
         };
         throw err;
       }
-      const { data } = await axios({
+      await axios({
         method: 'post',
         url: `${url}/api/users`,
         data: formValues,
@@ -42,12 +42,11 @@ function UserSignUp() {
 
       history.push('/');
     } catch (err) {
-      console.log(err.response);
       if (err.response.status === 400) {
         setError(err.response.data);
         setIsLoading(false);
       } else {
-        history.push(errorRoutes[err.response.status]);
+        history.push(errorRoutes[err.response.status] || '/error');
       }
     }
   }
@@ -55,7 +54,10 @@ function UserSignUp() {
   function handleFormChange(e) {
     setFormValues((prevState) => {
       return {
+        // spread previous state to ensure persistence of form field values
         ...prevState,
+        // whichever form field is the target of the change event will have its
+        // name attribute used as a property on formValues and its value saved
         [e.target.name]: e.target.value,
       };
     });

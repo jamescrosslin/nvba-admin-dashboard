@@ -24,7 +24,6 @@ export function useFetchData(initialValues) {
         requestOptions.auth = { username: user.username, password: user.password };
 
       const { data } = await axios(requestOptions);
-      console.log(data);
 
       if (transformFunction) transformFunction(data);
 

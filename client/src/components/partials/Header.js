@@ -1,5 +1,6 @@
 import { Link, NavLink } from 'react-router-dom';
 import { useUserContext } from '../../context/UserContext';
+
 function Header() {
   const { user } = useUserContext();
   return (
@@ -10,23 +11,26 @@ function Header() {
         </h1>
         <nav>
           <ul className={`header--${user.firstName ? 'signedin' : 'signedout'}`}>
-            {(user.firstName && (
-              <>
-                <li>Welcome, {`${user.firstName} ${user.lastName}`}!</li>
-                <li>
-                  <Link to="/signout">Sign Out</Link>
-                </li>
-              </>
-            )) || (
-              <>
-                <li>
-                  <NavLink to="/signup">Sign Up</NavLink>
-                </li>
-                <li>
-                  <NavLink to="/signin">Sign In</NavLink>
-                </li>
-              </>
-            )}
+            {
+              /* will only display welcome message if user is signed in */
+              (user.username && (
+                <>
+                  <li>Welcome, {`${user.firstName} ${user.lastName}`}!</li>
+                  <li>
+                    <Link to="/signout">Sign Out</Link>
+                  </li>
+                </>
+              )) || (
+                <>
+                  <li>
+                    <NavLink to="/signup">Sign Up</NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/signin">Sign In</NavLink>
+                  </li>
+                </>
+              )
+            }
           </ul>
         </nav>
       </div>
