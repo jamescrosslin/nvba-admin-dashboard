@@ -107,7 +107,7 @@ function CourseForm({ method, apiRoute, course, title }) {
           <button className="button" type="submit">
             {title}
           </button>
-          <Link className="button button-secondary" to="/">
+          <Link className="button button-secondary" to={`/courses/${course?.id}` || '/'}>
             Cancel
           </Link>
         </form>
