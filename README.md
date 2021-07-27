@@ -21,7 +21,7 @@ NVBA Admin Dashboard is a course management application for a small to mid-size 
 Clone the project
 
 ```bash
-  git clone https://link-to-project
+  git clone https://github.com/jamescrosslin/nvba-admin-dashboard.git
 ```
 
 Go to the project directory
